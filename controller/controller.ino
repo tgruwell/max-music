@@ -51,9 +51,6 @@ void setup() {
   player.outputDevice(DFPLAYER_DEVICE_SD);
 }
 
-// TODO for Max:
-- // find a way to make it play for 30 minutes without needing reset
-- // find a way to make it shut off at a specific time
 void loop() {
   // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
@@ -70,8 +67,8 @@ void loop() {
 
   Serial.println(counter);
 
-  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if (buttonState == HIGH && isReset == 1) {
+  // check if the pushbutton is pressed. If it is, the buttonState is LOW:
+  if (buttonState == LOW && isReset == 1) {
     // turn LED on:
     digitalWrite(ledPin1, HIGH);
     digitalWrite(ledPin2, HIGH);
@@ -79,6 +76,7 @@ void loop() {
     digitalWrite(ledPin4, HIGH);
 
     if (isBusy == HIGH) {
+      // If a track isn't currently playing, then play one
       isReset = 0;
       int trackToPlay = random(12) + 1;
       Serial.print("Playing track ");
@@ -86,7 +84,7 @@ void loop() {
       player.play(trackToPlay);
       delay(1000);
     }
-  } else if (buttonState == LOW) {
+  } else if (buttonState == HIGH) {
     // turn LED off:
     isReset = 1;
     digitalWrite(ledPin1, LOW);
